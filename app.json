@@ -1,0 +1,12 @@
+{
+  "name": "contactsy",
+  "displayName": "contactsy",
+  "expo": {
+    "name": "contactsy",
+    "slug": "contactsy",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
