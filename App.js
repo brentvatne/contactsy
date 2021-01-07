@@ -3,7 +3,6 @@ import { Button, Text, View, StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import * as Contacts from "expo-contacts";
 
-
 export default function App() {
   const [contactId, setContactId] = React.useState(null);
 
@@ -14,16 +13,27 @@ export default function App() {
       [Contacts.Fields.FirstName]: "Bird",
       [Contacts.Fields.LastName]: "Man",
       [Contacts.Fields.Company]: "Young Money",
+      [Contacts.Fields.PhoneNumbers]: [{number: "+44123456789"}],
     };
-    const newContactId = await Contacts.addContactAsync(contact);
-    setContactId(newContactId);
-  }
+
+    try {
+      const newContactId = await Contacts.addContactAsync(contact);
+      setContactId(newContactId);
+    } catch(e) {
+      alert(e.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>{contactId}</Text>
       <Button onPress={addContact} title="Add contact" />
-      {contactId ? <Button onPress={() => Contacts.presentFormAsync(contactId)} title="Edit contact" /> : null}
+      {contactId ? (
+        <Button
+          onPress={() => Contacts.presentFormAsync(contactId)}
+          title="Edit contact"
+        />
+      ) : null}
     </View>
   );
 }
