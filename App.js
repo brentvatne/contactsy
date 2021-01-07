@@ -1,12 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from "react";
+import { Button, Text, View, StyleSheet } from "react-native";
+import Constants from "expo-constants";
+import * as Contacts from "expo-contacts";
+
 
 export default function App() {
+  const [contactId, setContactId] = React.useState(null);
+
+  const addContact = async () => {
+    const { status } = await Contacts.requestPermissionsAsync();
+
+    const contact = {
+      [Contacts.Fields.FirstName]: "Bird",
+      [Contacts.Fields.LastName]: "Man",
+      [Contacts.Fields.Company]: "Young Money",
+    };
+    const newContactId = await Contacts.addContactAsync(contact);
+    setContactId(newContactId);
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Text style={styles.paragraph}>{contactId}</Text>
+      <Button onPress={addContact} title="Add contact" />
+      {contactId ? <Button onPress={() => Contacts.presentFormAsync(contactId)} title="Edit contact" /> : null}
     </View>
   );
 }
@@ -14,8 +31,15 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: "center",
+    paddingTop: Constants.statusBarHeight,
+    backgroundColor: "#ecf0f1",
+    padding: 8,
+  },
+  paragraph: {
+    margin: 24,
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
